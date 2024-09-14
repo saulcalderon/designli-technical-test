@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { Expose, Transform } from 'class-transformer';
 
 /**
@@ -12,10 +13,12 @@ import { Expose, Transform } from 'class-transformer';
  * @property {string[]} receptor - Receiver emails without '@domain.com'
  */
 export class ResponseDto {
+  @ApiProperty()
   @Expose()
   @Transform(({ obj }) => obj.ses.receipt.spamVerdict.status === 'PASS')
   spam: boolean;
 
+  @ApiProperty()
   @Expose()
   @Transform(({ obj }) => obj.ses.receipt.virusVerdict.status === 'PASS')
   virus: boolean;
@@ -29,6 +32,7 @@ export class ResponseDto {
   @Transform(({ obj }) => obj.ses.receipt.dmarcVerdict.status)
   dmarcStatus: string;
 
+  @ApiProperty()
   @Expose()
   getDns(): boolean {
     return (
@@ -39,6 +43,7 @@ export class ResponseDto {
   }
   dns: boolean;
 
+  @ApiProperty()
   @Expose()
   @Transform(({ obj }) => {
     return new Date(obj.ses.mail.timestamp).toLocaleString('es', {
@@ -47,10 +52,12 @@ export class ResponseDto {
   })
   mes: string;
 
+  @ApiProperty()
   @Expose()
   @Transform(({ obj }) => obj.ses.receipt.processingTimeMillis > 1000)
   retrasado: boolean;
 
+  @ApiProperty()
   @Expose()
   @Transform(({ obj }) => {
     const email = obj.ses.mail.source;
@@ -58,6 +65,7 @@ export class ResponseDto {
   })
   emisor: string;
 
+  @ApiProperty()
   @Expose()
   @Transform(({ obj }) => {
     const emails = obj.ses.mail.destination;
