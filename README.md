@@ -1,6 +1,14 @@
 # designli-technical-test
 
+NestJS API to map SES Notification to a custom response.
 
+## Description of the solution
+
+The `class-transformer` library is used to transform the incoming SES Notification into a class instance and transform the instance into a custom response.
+
+## Prerequisites
+
+- Node.js (v20.17.0)
 
 ## Installation
 
@@ -16,20 +24,17 @@ $ npm run start
 
 # watch mode
 $ npm run start:dev
-
-# production mode
-$ npm run start:prod
 ```
 
-## Test
+## Run tests
 
 ```bash
 # unit tests
 $ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
 ```
+
+## Swagger documentation
+
+The Swagger documentation is available at `http://localhost:3000/api`.
+
+
