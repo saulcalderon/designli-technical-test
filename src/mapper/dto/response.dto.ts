@@ -23,24 +23,15 @@ export class ResponseDto {
   @Transform(({ obj }) => obj.ses.receipt.virusVerdict.status === 'PASS')
   virus: boolean;
 
-  @Transform(({ obj }) => obj.ses.receipt.spfVerdict.status)
-  spfStatus: string;
-
-  @Transform(({ obj }) => obj.ses.receipt.dkimVerdict.status)
-  dkimStatus: string;
-
-  @Transform(({ obj }) => obj.ses.receipt.dmarcVerdict.status)
-  dmarcStatus: string;
-
   @ApiProperty()
   @Expose()
-  getDns(): boolean {
+  @Transform(({ obj }) => {
     return (
-      this.spfStatus === 'PASS' &&
-      this.dkimStatus === 'PASS' &&
-      this.dmarcStatus === 'PASS'
+      obj.ses.receipt.spfVerdict.status === 'PASS' &&
+      obj.ses.receipt.dkimVerdict.status === 'PASS' &&
+      obj.ses.receipt.dmarcVerdict.status === 'PASS'
     );
-  }
+  })
   dns: boolean;
 
   @ApiProperty()
