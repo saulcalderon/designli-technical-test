@@ -35,6 +35,6 @@ $ npm run test
 
 ## Swagger documentation
 
-The Swagger documentation is available at `http://localhost:3000/api`.
+The Swagger documentation is available at `http://localhost:3000/api` after running the app.
 
 
