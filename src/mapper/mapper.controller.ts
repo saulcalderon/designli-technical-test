@@ -1,9 +1,10 @@
 import { Controller, Post, Body } from '@nestjs/common';
 import { MapperService } from './mapper.service';
 import { SESNotificationRequestDto } from './dto/ses-notification-request.dto';
-import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ResponseDto } from './dto/response.dto';
 
+@ApiTags('SES Notification Mapper - Easy Challenge')
 @Controller('mapper')
 export class MapperController {
   constructor(private readonly mapperService: MapperService) {}
@@ -12,7 +13,7 @@ export class MapperController {
   @ApiBody({ type: SESNotificationRequestDto })
   @ApiResponse({ type: ResponseDto, description: 'SES Notification Response' })
   @Post()
-  map(@Body() requestDto: SESNotificationRequestDto) {
+  sesNotificationMapper(@Body() requestDto: SESNotificationRequestDto) {
     return this.mapperService.mapToResponse(requestDto.Records);
   }
 }
