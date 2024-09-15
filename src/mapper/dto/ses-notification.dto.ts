@@ -1,129 +1,96 @@
-import { BadRequestException } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
-import { Expose, Transform, Type } from 'class-transformer';
-
-const message = (property: string, type: string) =>
-  `${property} must be a ${type}`;
+import { Type } from 'class-transformer';
+import {
+  ArrayNotEmpty,
+  IsArray,
+  IsDateString,
+  IsNotEmpty,
+  IsNotEmptyObject,
+  IsNumber,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
 
 class VerdictStatus {
   @ApiProperty()
-  @Expose()
-  @Transform(({ value }) => {
-    if (typeof value === 'string') return value;
-    throw new BadRequestException(message('status', 'string'));
-  })
+  @IsString()
+  @IsNotEmpty()
   status: string;
 }
 
 class MailDetails {
   @ApiProperty()
-  @Expose()
-  @Transform(({ value }) => {
-    if (typeof value === 'string') return value;
-    throw new BadRequestException(message('timestamp', 'string date'));
-  })
+  @IsDateString()
+  @IsNotEmpty()
   timestamp: string;
 
   @ApiProperty()
-  @Expose()
-  @Transform(({ value }) => {
-    if (Array.isArray(value)) return value;
-    throw new BadRequestException(message('destination', 'array'));
-  })
-  @Type(() => String)
+  @IsString({ each: true })
+  @ArrayNotEmpty()
+  @IsArray()
   destination: string[];
 
   @ApiProperty()
-  @Expose()
-  @Transform(({ value }) => {
-    if (typeof value === 'string') return value;
-    throw new BadRequestException(message('source', 'string'));
-  })
+  @IsString()
+  @IsNotEmpty()
   source: string;
 }
 
 class ReceiptDetails {
   @ApiProperty()
-  @Expose()
-  @Transform(({ value }) => {
-    if (typeof value === 'number') return value;
-    throw new BadRequestException(message('processingTimeMillis', 'number'));
-  })
+  @IsNumber()
+  @IsNotEmpty()
   processingTimeMillis: number;
 
   @ApiProperty()
-  @Expose()
-  @Transform(({ value }) => {
-    if (typeof value === 'object') return value;
-    throw new BadRequestException(message('spamVerdict', 'object'));
-  })
   @Type(() => VerdictStatus)
+  @ValidateNested()
+  @IsNotEmptyObject()
   spamVerdict: VerdictStatus;
 
   @ApiProperty()
-  @Expose()
-  @Transform(({ value }) => {
-    if (typeof value === 'object') return value;
-    throw new BadRequestException(message('virusVerdict', 'object'));
-  })
   @Type(() => VerdictStatus)
+  @ValidateNested()
+  @IsNotEmptyObject()
   virusVerdict: VerdictStatus;
 
   @ApiProperty()
-  @Expose()
-  @Transform(({ value }) => {
-    if (typeof value === 'object') return value;
-    throw new BadRequestException(message('spfVerdict', 'object'));
-  })
   @Type(() => VerdictStatus)
+  @ValidateNested()
+  @IsNotEmptyObject()
   spfVerdict: VerdictStatus;
 
   @ApiProperty()
-  @Expose()
-  @Transform(({ value }) => {
-    if (typeof value === 'object') return value;
-    throw new BadRequestException(message('dkimVerdict', 'object'));
-  })
   @Type(() => VerdictStatus)
+  @ValidateNested()
+  @IsNotEmptyObject()
   dkimVerdict: VerdictStatus;
 
   @ApiProperty()
-  @Expose()
-  @Transform(({ value }) => {
-    if (typeof value === 'object') return value;
-    throw new BadRequestException(message('dmarcVerdict', 'object'));
-  })
   @Type(() => VerdictStatus)
+  @ValidateNested()
+  @IsNotEmptyObject()
   dmarcVerdict: VerdictStatus;
 }
 
 class SESInformation {
   @ApiProperty()
-  @Expose()
-  @Transform(({ value }) => {
-    if (typeof value === 'object') return value;
-    throw new BadRequestException(message('receipt', 'object'));
-  })
   @Type(() => ReceiptDetails)
+  @ValidateNested()
+  @IsNotEmptyObject()
   receipt: ReceiptDetails;
 
   @ApiProperty()
-  @Expose()
-  @Transform(({ value }) => {
-    if (typeof value === 'object') return value;
-    throw new BadRequestException(message('mail', 'object'));
-  })
   @Type(() => MailDetails)
+  @ValidateNested()
+  @IsNotEmptyObject()
   mail: MailDetails;
 }
 
 export class SESNotificationDto {
   @ApiProperty()
-  @Expose()
-  @Transform(({ value }) => {
-    if (typeof value === 'object') return value;
-    throw new BadRequestException(message('ses', 'object'));
-  })
   @Type(() => SESInformation)
+  @ValidateNested()
+  @IsNotEmptyObject()
   ses: SESInformation;
 }

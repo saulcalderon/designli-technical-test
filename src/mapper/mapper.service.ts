@@ -6,15 +6,7 @@ import { SESNotificationDto } from './dto/ses-notification.dto';
 @Injectable()
 export class MapperService {
   mapToResponse(rawSesNotification: SESNotificationDto[]): ResponseDto[] {
-    const mappedNecessaryData = plainToInstance(
-      SESNotificationDto,
-      rawSesNotification,
-      {
-        excludeExtraneousValues: true,
-      },
-    );
-
-    return plainToInstance(ResponseDto, mappedNecessaryData, {
+    return plainToInstance(ResponseDto, rawSesNotification, {
       excludeExtraneousValues: true,
     });
   }
