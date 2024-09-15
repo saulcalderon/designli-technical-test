@@ -10,10 +10,19 @@ import { ParsedMail, simpleParser } from 'mailparser';
 
 @Injectable()
 export class MailParseService {
+  private async readFileByURL(url: string): Promise<string> {
+    try {
+      const response = await fetch(url);
+      return await response.text();
+    } catch (error) {
+      console.error(error);
+      throw new BadRequestException(`Error reading file in url ${url}`);
+    }
+  }
+
   private async readFileByFilePath(filePath: string): Promise<Buffer> {
     try {
-      const file = await readFile(filePath);
-      return file;
+      return await readFile(filePath);
     } catch (error) {
       console.error(error);
       throw new BadRequestException(`Error reading file in path ${filePath}`);
@@ -50,8 +59,7 @@ export class MailParseService {
     if (method === MailParseMethod.FILE_PATH) {
       file = await this.readFileByFilePath(source);
     } else {
-      // TODO: Implement file download from URL
-      file = source;
+      file = await this.readFileByURL(source);
     }
 
     const { attachments } = await this.parseEmail(file);
@@ -61,7 +69,6 @@ export class MailParseService {
     }
 
     const attachmentBuffer = attachments[0].content;
-
     return this.transformAttachmentToStream(attachmentBuffer);
   }
 }
